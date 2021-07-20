@@ -30,8 +30,15 @@ typedef  unsigned long U64;
 typedef  long S64;
 typedef  int S32;
 
-#define DEBUG
+#define MAX 256
+
+#define DEBUG_ALLOC 2
+
+#define DEBUG DEBUG_ALLOC
+
+
 #include "cDatum.h"
 #include "cCollection.h"
+
 
 void q(void*p);

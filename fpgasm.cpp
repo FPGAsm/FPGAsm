@@ -29,6 +29,10 @@ enum outputType {
 };
 outputType otype; //type of output- verilog or xdl
 cDevice *pDevice;
+
+unsigned gLineNo=0;
+
+
 #include "malloc.h"
 int main(int argc,char** argv){
 
@@ -70,11 +74,11 @@ int main(int argc,char** argv){
 // DEBUGGING _ REMOVE ME!
 //fout=stdout;  
   pDevice = NULL;
-  cParse* parser = new cParse();
+  cParse* pParser = new cParse();
   try {
-    parser->parse(fin);
+    pParser->parse(fin);
 //fprintf(stderr,"parse() completed\n");
-    cModule* root = parser->topModule;
+    cModule* root = pParser->topModule;
     //(cModule*)pDevice->findProto((char*)"top",3); 
     /* Determine the requested output type */
 //fprintf(stderr,argv[2]);

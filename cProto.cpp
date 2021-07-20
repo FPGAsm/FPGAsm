@@ -25,11 +25,20 @@ CLASS::CLASS(char* nam,int size)
   name=(char*)malloc(size+1);
   strncpy(name,nam,size);
   name[size]=0;
-  paramnames = new cCollection();
-  pins = new cCollection();
-#ifdef DEBUG
-  paramnames->setdebugname(nam,size);
-#endif
+  //#ifdef DEBUG
+  char*xbuf = (char*)malloc(size+128);
+  strncpy (xbuf,nam,size);
+  strcpy (xbuf+size,".pnames");
+  paramnames = new cCollection(256,xbuf,strlen(xbuf));
+  strcpy (xbuf+size,".pins");
+  pins = new cCollection(512,xbuf,strlen(xbuf));
+  strcpy (xbuf+size,".vars");
+  vars = new cCollection(256,xbuf,strlen(xbuf));
+  free(xbuf);
+  //#else 
+  //  paramnames = new cCollection();
+  //  pins = new cCollection();
+  //#endif
   psubs=0;
 //  pwires=0;
   xwire=0;

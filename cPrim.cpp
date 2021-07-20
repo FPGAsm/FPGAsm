@@ -27,9 +27,9 @@ CLASS::CLASS(char*nam,int len)
 : cProto(nam,len)
 {
 //fprintf(stderr,"cPrim:cPrim %d %s\n",len,nam);
-  //cfg     =g_hash_table_new(g_str_hash,g_str_equal);
+//cfg     =g_hash_table_new(g_str_hash,g_str_equal);
   pDevice->addProto(name,len,this);
-  cfgval=new cCollection();
+  cfgval=new cCollection(256,name,len);
 }
 CLASS::~CLASS()
 {

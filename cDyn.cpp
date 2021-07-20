@@ -86,12 +86,16 @@ void CLASS::expand(){
   char* dest;
   char* src;
   char c;
-//hierName(stderr);fprintf(stderr,"\n");
-//fprintf(stderr," being expanded  %p\n",this);
+hierName(stderr);fprintf(stderr,"\n");
+ fprintf(stderr," hero: %s\n",hero->name);
+ fprintf(stderr," being expanded.pparams:  %p\n",hero->pparams);
   //--------------------------
   // expand parameters.  Start by copying hero's
   if(hero->pparams){
-    pparams = new cCollection(*hero->pparams);
+ fprintf(stderr,"debugname: %p\n",hero->pparams->debugname);
+ fprintf(stderr,"debugname: %s\n",hero->pparams->debugname);
+    pparams = new cCollection(*hero->pparams); 
+  fprintf(stderr,"expanded\n");
 //pparams->dump(stderr,"expanding");
 // hero->pparams->dump(stderr,"expanding");
   // now step through and fix the parsub values
@@ -161,7 +165,7 @@ void CLASS::expand(){
 //fprintf(stderr,"Done realizing \n");
     }
   } else {
-    pparams = new cCollection();
+    pparams = new cCollection(MAX,(char*)"dynparam",9);
     pparams->solidify(); 
   }
 //pparams->dump(stderr,"params");

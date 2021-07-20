@@ -32,8 +32,9 @@
 //class cDatum; //global.h always includes cDatumc & Collection.h
 class cCollection{
 public:
-   cCollection(); //for debugging only
-   cCollection(int max);
+  //  cCollection(); //for debugging only
+  // cCollection(int max);
+  cCollection(int max,char*name,int namelen);
    cCollection(const cCollection&src); //reuse names, point at same data
   ~cCollection();
    void resize(int max);
@@ -53,9 +54,10 @@ public:
   char** name;
   cDatum** data;
   int size;
+  int alloted;  //number of allocated data ptrs
 #ifdef DEBUG
-  int debugmax;
-  char* debugname;
+  //  int debugmax;
+  char debugname[256];
   void  setdebugname(char*name,int len);
 #endif
 private:

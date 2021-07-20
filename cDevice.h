@@ -24,7 +24,8 @@ class cProto;
 class cDevice{
 //DATA
 private: 
-  cCollection protos;
+  cCollection* pProtos;
+  cCollection* pSites; //map sitename like SLICE_X?Y? to tilename R?C?
   int lineno;
   char* buf;
   FILE* f;
@@ -49,7 +50,8 @@ private:
   bool readline();
   void parse_tile(char* buf);
   void parse_defs(char* buf);
-  cCollection sites; //map sitename like SLICE_X?Y? to tilename R?C?
+  
+
   //GHashTable *htPrims;  // map primnames like IOB to cPrim objects
   void errorIn(const char* function);
   void error(U32 xerrno);

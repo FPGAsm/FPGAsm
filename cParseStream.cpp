@@ -20,6 +20,7 @@
 #include "cParseStream.h"
 #define CLASS cParseStream
 #include <ctype.h>
+extern unsigned gLineNo;
 CLASS::CLASS(){
   file=0;
   buf=(char*)malloc(1024);
@@ -91,6 +92,7 @@ bool CLASS::reload(){
   ptr=buf;
   *ptr=0;
   lineno++;
+  gLineNo=lineno;
   char*ret=fgets(buf,1024,file);
  return 0!=ret;
 }
@@ -114,7 +116,7 @@ bool CLASS::wsp(){
 bool CLASS::enclosedComment(){
   //for error reporting, keep track of opening position
   int errline=lineno;
-  char* errsrc = strdup(buf);
+  //  char* errsrc = strdup(buf);  // create a copy of buffer
   char* errptr=ptr;
   while(true){
     char* p = strstr(ptr,"*/");
@@ -124,9 +126,10 @@ bool CLASS::enclosedComment(){
     }
     if(!reload()){
       //even though the error occurs later, the source is here:
-      memcpy(buf,errsrc,sizeof(buf));
+      //   memcpy(buf,errsrc,sizeof(buf)); WHY???
       ptr=errptr;
       lineno=errline;
+      gLineNo=lineno;
       errorIn("enclosedComment()");
       fprintf(stderr,"where is the closing */\n");
       error(1);

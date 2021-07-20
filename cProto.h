@@ -30,7 +30,7 @@ public:
   // data
   bool converted;    //verilog sucker marks modules already sucked in as used.
   char* name;       //name of this module/primitive...
-  cCollection vars;
+  cCollection* vars;
   //primitives and modules both have a list of valid parameters
   cCollection *paramnames;
   cCollection *psubs;   //names-> submodules...Not relevant to prim.

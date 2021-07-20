@@ -25,7 +25,7 @@
 #define CLASS cParse
 #include "cDevice.h"
 extern cDevice* pDevice;
-
+extern unsigned gLineNo;
 #include "cMultiWireBuilder.h"
 CLASS::CLASS(){
   topModule = NULL;
@@ -66,9 +66,11 @@ bool CLASS::handleInclude(int len){
         FILE* fold = file;
         int linenoOld=lineno;
         lineno=0;
+       
         parse(f);
         file=fold;
         lineno=linenoOld;
+	gLineNo=lineno;
       }
     } else {
       errorIn(funcname);
@@ -542,7 +544,7 @@ void CLASS::parsePairs(cModule* module,cSub* sub){
 ******************************************************************************/ 
 cSub* CLASS::parseSub(cModule* module,int len){
   // NAME
-//fprintf(stderr,"sub %.*s %d\n",len,ptr,len);
+  //fprintf(stderr,"sub %.*s %d\n",len,ptr,len);
   validateName(__func__,len,module);
   cSub* sub = new cSub(ptr,len);  
   module->psubs->add(ptr,len,cDatum::newSub(sub));    //add to the collection...
@@ -568,7 +570,7 @@ cSub* CLASS::parseSub(cModule* module,int len){
   // LOCATION.  This should be (x,y) or name
   //sub->setLocation(parseLocation());
   //Start with an empty, expandable parameter collection
-  sub->pparams = new cCollection();
+  sub->pparams = new cCollection(MAX,(char*)"subparams",9);
   /* pparams will have name:value pairs.  A notable one is cfg:xxx
    because it contains a whole collection inside.  */
  
@@ -595,7 +597,7 @@ fprintf(stderr,"merging inst %s\n",inst->name);
   //merge can extend inst's pins.  Since inst started out with a reference
   //to type module's pins, let's make a copy. Now we will be appending and
   //never removing items, so we can reference individual pins in module.
-  cCollection *pins = new cCollection();
+  cCollection *pins = new cCollection(MAX,(char*)"pincpy",6);
   int i; for(i=0;i<inst->pins->size;i++){
     pins->name[i] = inst->pins->name[i]; //reference to type's pin's name
     pins->data[i] = inst->pins->data[i]; //reference to type's pin's data
@@ -872,3 +874,4 @@ void CLASS::validateName(const char* func,int len,cModule* module){
     error(1);
    }
 }
+

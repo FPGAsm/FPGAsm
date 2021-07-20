@@ -184,12 +184,12 @@ void CLASS::realize(){
       valX=x;
       valY=y;
       return;
-    } 
+    }
     if(0==strncmp("cfg:",valStr,4)){
       //cfg contains many name:val pairs...
       char* p = strtok(valStr," \n");
       int maxcfgs=256;
-      cCollection* cfgs = new cCollection(maxcfgs);
+      cCollection* cfgs = new cCollection(maxcfgs,(char*)"cfg",3);
 int counter=0;
       while(true){
         p=strtok(NULL," :\n");
@@ -218,7 +218,7 @@ if(counter>=maxcfgs){
 //fprintf(stderr,"[[%s:%s]]\n",name,val);
       }
       cfgs->solidify();      
-      delete valStr;
+      free(valStr);
       valCfgs=cfgs;
       type=TYPE_CFGS;
     }
@@ -248,7 +248,7 @@ void CLASS::realize1(){
       //cfg contains many name:val pairs...
       char* p = strtok(valStr," ");
       int maxcfgs=256;
-      cCollection* cfgs = new cCollection(maxcfgs);
+      cCollection* cfgs = new cCollection(maxcfgs,(char*)"cfg1",4);
 int counter=0;
       while(true){
         p=strtok(NULL," :");
@@ -277,7 +277,7 @@ if(counter>=maxcfgs){
 //fprintf(stderr,"[[%s:%s]]\n",name,val);
       }
       cfgs->solidify();      
-      delete valStr;
+      free(valStr);
       valCfgs=cfgs;
       type=TYPE_CFGS;
     }

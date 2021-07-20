@@ -20,59 +20,105 @@
 #include "global.h"
 #include "cSub.h"
 #include "cProto.h"
-#define CLASS cCollection
 
+
+extern unsigned gLineNo;
+#define CLASS cCollection
+/*
 CLASS::CLASS(int max){
   //  chunk = g_string_chunk_new(32);
     name = (char**)malloc(max*sizeof(char*));
     data = (cDatum**)malloc(max*sizeof(cDatum*));
     size=0;
-#ifdef DEBUG
-    debugmax=max;
+    alloted=max;
+    setdebugname((char*)"unk",4);
+#if DEBUG & DEBUG_ALLOC
+    fprintf(stderr,"%d:cCollection: allocated %s %d\n",gLineNo,debugname,alloted);
+
 #endif
 }
-CLASS::CLASS(){
-    name = (char**)malloc(256*sizeof(char*));
-    data = (cDatum**)malloc(256*sizeof(cDatum*));
+*/
+CLASS::CLASS(int max,char*thename,int namelen){
+    name = (char**)malloc(max*sizeof(char*));
+    data = (cDatum**)malloc(max*sizeof(cDatum*));
     size=0;
-#ifdef DEBUG
-    debugmax=256;
+    alloted=max;
+    setdebugname(thename,namelen);
+#if DEBUG & DEBUG_ALLOC
+    fprintf(stderr,"%d:cCollection: allocated %s %d\n",gLineNo,debugname,alloted);
 #endif
 }
+/*
+CLASS::CLASS(){
+    name = (char**)malloc(MAX*sizeof(char*));
+    data = (cDatum**)malloc(MAX*sizeof(cDatum*));
+    size=0;
+    alloted=MAX;
+#ifdef DEBUG
+    strcpy(debugname,"unknown");
+#if DEBUG & DEBUG_ALLOC
+    fprintf(stderr,"%d:cCollection: allocated %s %d\n",gLineNo,debugname,alloted);
+#endif
+#endif
+}
+*/
 CLASS::CLASS(const CLASS& src){
-//fprintf(stderr,"COPY CONSTRUCTOR %d\n",src.size);
+  //fprintf(stderr,"COPY CONSTRUCTOR %d\n",src.size);
     name=src.name; //reuse name array
     //data array will be copied.  That way data can be replaced
     //without affecting the src.
-    data=(cDatum**)malloc(src.size*sizeof(cDatum*));
-    memcpy(data,src.data,src.size*sizeof(cDatum*));
+    //fprintf(stderr,"alloted: %d\n",src.alloted);
+    data=(cDatum**)malloc(src.alloted*sizeof(cDatum*));
+    memcpy(data,src.data,src.alloted*sizeof(cDatum*));
+    // fprintf(stderr,"memcyp %p,%p,%d\n",data,src.data,(int)src.alloted*sizeof(cDatum*));
     size=src.size;
+    alloted=src.alloted;
+    strcpy(debugname,"copy");
+#if DEBUG & DEBUG_ALLOC
+    fprintf(stderr,"%d:cCollection: allocated %s %d\n",gLineNo,debugname,alloted);
+#endif    
 }
 CLASS::~CLASS(){
+  #if DEBUG & DEBUG_ALLOC
+    fprintf(stderr,"cCollection: freeing %s %d\n",debugname,alloted);
+  #endif
   free(name); //name array
   int i;
   for(i=0;i<size;i++){
     delete data[i];
   }
   free(data);
- 
+  #if DEBUG & DEBUG_ALLOC
+    fprintf(stderr,"cCollection: freeing %s %d\n",debugname,alloted);
+  #endif
 }
 
-void CLASS::resize(int max){
+void CLASS::resize(int newsize){
+  fprintf(stderr,"resizing to %d\n",newsize);
+  data = (cDatum**)realloc(data, newsize*sizeof(void*));
+  name = (char**)realloc(name,newsize*sizeof(void*));
+  fprintf(stderr,"resized to %d\n",newsize);
+  alloted = newsize;
   
 }
 int CLASS::add(const char* str,int len,cDatum* dat){
-#ifdef DEBUG
-  if(size>=debugmax){
-    fprintf(stderr,"cCollection:%s add RANGE ERROR - overwriting RAM\n",debugname?debugname:"unnamed");
-    fprintf(stderr,"max is %d, writing at %d\n",debugmax,size);
-    fprintf(stderr,"len %d str %s\n",len,str);
-this->dump(stderr,"DUMPING");
+  if (size>=alloted) {
+    resize(size*2);
+    }
   
+  
+#ifdef CRAP
+#ifdef DEBUG
+  if(size>=alloted){
+    fprintf(stderr,"cCollection:%s add RANGE ERROR - overwriting RAM\n",debugname?debugname:"unnamed");
+    fprintf(stderr,"debugmax is %d, writing at %d\n",debugmax,size);
+    fprintf(stderr,"len %d str %s\n",len,str);
+    //this->dump(stderr,"DUMPING");
     throw(1);
 }
 #endif
-//printf("ADDING %s \n",str);
+#endif
+  //  printf("ADDING to %s %s at %d, %p\n",debugname?debugname:"???",str,size,data);
   char*p = (char*)malloc(len+1);
   memcpy(p,str,len);
   p[len]=0;
@@ -87,6 +133,10 @@ this->dump(stderr,"DUMPING");
 ******************************************************************************/ 
 //TODO: rename to addRef
 int CLASS::addClone(const char* str,cDatum* dat){
+  if (size>=alloted) {
+    resize(size*2);
+    }
+  printf("ADDING clone %s at %d\n",str,size);
   name[size]=(char*)str;
   data[size]=dat;
   return size++;
@@ -96,9 +146,11 @@ void CLASS::solidify(){
   //replace builder with properly sized copy of the array
   name= (char**)realloc(name,size*sizeof(char*));
   data= (cDatum**)realloc(data,size*sizeof(cDatum*));
+  alloted = size;
+  //#ifdef DEBUG
+  //debugmax=size;
 #ifdef DEBUG
-  debugmax=size;
-//fprintf(stderr,"Solidified %s to %d elements",debugname?debugname:"unknown",size);
+  fprintf(stderr,"Solidified %s to %d elements\n",debugname,size);
 #endif
 //fprintf(stderr,"PRE-SOLIDIFIED. \n");
 //dump(stderr);
@@ -170,8 +222,7 @@ void CLASS::dump(FILE*f,const char* title){
 }
 #ifdef DEBUG
 void CLASS::setdebugname(char*name,int len){
-  debugname = (char*)malloc(len+1);
-  memcpy(debugname,name,len);
+  strncpy(debugname,name,len);
   debugname[len]=0;
 }
 #endif

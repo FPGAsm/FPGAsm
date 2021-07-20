@@ -59,7 +59,8 @@ protected:
   void error(int xerrno);
   void warning(int xerrno);
 
-//and the data  
+//and the data
+public: //TODO: clean up logging
   FILE* file;
   int lineno;
   char* ptr;

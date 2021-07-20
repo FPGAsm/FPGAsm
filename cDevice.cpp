@@ -21,13 +21,12 @@
 #include "cPrim.h"
 #define CLASS cDevice 
 
-CLASS::CLASS()
-:sites(1000000) //TODO: should dynamically resize maybe?
-{
-  #ifdef DEBUG
-    sites.setdebugname((char*)"sites",5);
- #endif
+extern unsigned gLineNo;
 
+CLASS::CLASS()
+{
+  pSites = new cCollection(1000000,(char*)"sites",5);
+  pProtos = new cCollection(MAX,(char*)"protos",6);
   //htPlace=g_hash_table_new(g_str_hash,g_str_equal);
   //htPrims =g_hash_table_new(g_str_hash,g_str_equal);
 }
@@ -54,14 +53,14 @@ void CLASS::parse_defs( char*buf){
     int i;
     for(i=0;i<pdcount;i++){
       // primitive_def NAME PINS ELEMENTS
-      fgets(buf,1024,f);
-//printf("[%s]\n",buf);
+      readline();//fgets(buf,1024,f);
+   //printf("[%s]\n",buf);
       char name[32];
       int pins;
       int elements;
       sscanf(buf," (primitive_def %s %d %d",(char*)&name,&pins,&elements);
     // create a primitive object and map by name.
-//printf("primitive %s,%d,%d\n",name,pins,elements);
+      //fprintf(stderr,"primitive %s,%d,%d\n",name,pins,elements);
       cPrim* prim = new cPrim(name,strlen(name));
       prim->paramnames->add("loc",3,cDatum::newInt(0));
       prim->paramnames->add("cfg",3,cDatum::newInt(0)); //TODO: null is OK now
@@ -71,7 +70,7 @@ void CLASS::parse_defs( char*buf){
       //\t\t(pin RESET RESET output)
       int i;
       for(i=0;i<pins;i++){
-        fgets(buf,1024,f);
+        readline();//fgets(buf,1024,f);
         char name[32];
         char name1[32];
         char dir[32];
@@ -90,14 +89,14 @@ printf("ERROR: pin direction\n");
       // Element name pins
     // Elements are interesting only if there is a 'cfg' line...
       for(i=0;i<elements;i++){
-        fgets(buf,1024,f); //(element line
+        readline();//fgets(buf,1024,f); //(element line
         char elname[32];
         int  elpins;     //not interesting, just to skip lines...
         if(2==sscanf(buf," (element %s %d",elname,&elpins)){
 //printf("OK,elname %s %d\n",elname,elpins);
           //skip element's pins
           int j; for(j=0;j<=elpins;j++) //and one extra for cfg test
-            fgets(buf,1024,f);
+		   readline();//fgets(buf,1024,f);
           //is the next line (cfg list
           if(0==strncmp(buf,"\t\t\t(cfg ",8)){
             //OK, this is really interesting....We shall store a
@@ -117,7 +116,7 @@ printf("ERROR: pin direction\n");
           while(true){
             if(0==strncmp(buf,"\t\t)\n",4))
              break;
-            fgets(buf,1024,f);
+            readline();//fgets(buf,1024,f);
           }
         } else {
 printf("ERROR: expected (element, got [%s].  index %d out of %d\n",buf,i,elements);
@@ -125,18 +124,21 @@ printf("ERROR: expected (element, got [%s].  index %d out of %d\n",buf,i,element
       }
       prim->paramnames->solidify();
       prim->cfgval->solidify();
-      fgets(buf,1024,f); //eat the \t\t(
+      readline();//fgets(buf,1024,f); //eat the \t\t(
     }
+
+    
     //THIS KILL RAM!  should resize somehow...TODO:protos.solidify();
   }
+  //  fprintf(stderr,"done with primitives\n");
 }
 
 /******************************************************************************/
 void CLASS::addProto(char*name,int len,cProto* proto) {
 //fprintf(stderr,"addProto %d %s\n",len,name);
 //make sure there are no duplicates
-  if(-1==protos.find(name,len)){
-    protos.add(name,len,cDatum::newProto(proto));
+  if(-1==pProtos->find(name,len)){
+    pProtos->add(name,len,cDatum::newProto(proto));
   } else {
     fprintf(stderr,"cDevice::addProto Module %s already exists\n",name);
     throw(1);
@@ -145,13 +147,13 @@ void CLASS::addProto(char*name,int len,cProto* proto) {
 /******************************************************************************/
 
 int CLASS::idxFindProto(char*name,int len){
-  return protos.find(name,len);
+  return pProtos->find(name,len);
 }
 cProto* CLASS::findProto(char*name,int len) {
 //protos.dump(stderr);
-  int i=protos.find(name,len);
+  int i=pProtos->find(name,len);
   if(-1==i) return 0;
-  cDatum*p = protos.getDatum(i);
+  cDatum*p = pProtos->getDatum(i);
   if(p->type!=TYPE_PROTO){
    fprintf(stderr,"findProto: type mismatch\n");
     throw(1);
@@ -161,18 +163,18 @@ cProto* CLASS::findProto(char*name,int len) {
 /******************************************************************************/
 //used by hash table iterator...
 void CLASS::listProtos() {
-  protos.dump(stderr,"protos:\n");
+  pProtos->dump(stderr,"protos:\n");
 }
 
 const char* CLASS::tileFor( char* primsite){
   int i;
-  i=sites.find(primsite);
+  i=pSites->find(primsite);
 if(-1==i){
   fprintf(stderr,"cDevice::tileFor(\"%s\") is impossible\n",primsite);
   throw(1);
   
 }
-  cDatum* dat = sites.getDatum(i);
+  cDatum* dat = pSites->getDatum(i);
   if(TYPE_TILE != dat->type){
     fprintf(stderr,"cDevice::tileFor %s NOT A TILE\n",primsite);
     throw(1);
@@ -183,6 +185,7 @@ if(-1==i){
 
 /******************************************************************************/
 void CLASS::parse_tile( char*buf){
+  //  fprintf(stderr,"Parsing tile %s\n",buf);
   if(0==strncmp(buf,"\t(tile ",7)){
     // Appears to be a valid tile description...
     int x;
@@ -194,16 +197,16 @@ void CLASS::parse_tile( char*buf){
 //printf("read: %d %d %s %d\n",x,y,whatever,count);
     int i;
     for(i=0;i<count;i++){
-      fgets(buf,1024,f);
+      readline();//fgets(buf,1024,f);
       char sitename[32];
       char sitetype[32];
       char siteconn[16];
       int count;
       sscanf(buf," (primitive_site %s %s %s %d",(char*)&sitename,(char*)&sitetype,(char*)&siteconn,&count);
-//printf("primsite: %s %s %s %d\n",sitename,sitetype,siteconn,count);
+      //printf("primsite: %s %s %s %d\n",sitename,sitetype,siteconn,count);
       // add sitename/tilename mapping to our device
       //g_hash_table_insert(htPlace,g_strdup(sitename),g_strdup(tilename));
-      sites.add(sitename,strlen(sitename),cDatum::newTile(tilename,strlen(tilename)));
+      pSites->add(sitename,strlen(sitename),cDatum::newTile(tilename,strlen(tilename)));
      }
   }
 }
@@ -211,13 +214,13 @@ void CLASS::parse_tile( char*buf){
 void CLASS::parse_xdlrc(const char* fname){
   // parse the file...
   f = fopen(fname,"r");
-  lineno=0;
   if(!f){
     errorIn("parse_xdlrc()");
     fprintf(stderr,"#device file '%s' could not be opened\n",fname);
     error(1);
   }
-  lineno=1;
+  unsigned oldlineno = gLineNo;
+  gLineNo = lineno = 1;
   buf = (char*)malloc(1024);
   int stage=-1;
   while(true){
@@ -258,6 +261,8 @@ void CLASS::parse_xdlrc(const char* fname){
         break;
     }
   }
+  fprintf(stderr,"Parsed %d lines from xdlrc file %s\n",lineno,fname);
+  gLineNo=oldlineno;
 }
 
 char* CLASS::place(const char* key){
@@ -268,8 +273,12 @@ throw(100);
 
 
 bool CLASS::readline(){
-  lineno++;
-  return fgets(buf,1024,f);
+  gLineNo = lineno++;
+
+  char*p = fgets(buf,1024,f);
+  //  fprintf(stderr,"%d._.%d.\n",gLineNo,(int)strlen(buf));
+
+  return p;
 }
 
 

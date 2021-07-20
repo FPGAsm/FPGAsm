@@ -28,8 +28,9 @@ extern cDevice* pDevice;
 CLASS::CLASS(char* name,int size) 
 : cProto(name,size)
 {
-//printf("MODULE %s %d\n",name,size);
-  psubs=new cCollection(4096);  //TODO: make collection expand
+printf("MODULE %s %d\n",name,size);
+ fflush(stdout);
+ psubs=new cCollection(MAX,name,size);  //TODO: make collection expand
   pDevice->addProto(name,size,this); //will check for dups
 }
 CLASS::~CLASS(){
