@@ -94,10 +94,14 @@ CLASS::~CLASS(){
 }
 
 void CLASS::resize(int newsize){
+#ifdef DEBUG
   fprintf(stderr,"resizing to %d\n",newsize);
+#endif
   data = (cDatum**)realloc(data, newsize*sizeof(void*));
   name = (char**)realloc(name,newsize*sizeof(void*));
+#ifdef DEBUG
   fprintf(stderr,"resized to %d\n",newsize);
+#endif
   alloted = newsize;
   
 }
@@ -136,7 +140,7 @@ int CLASS::addClone(const char* str,cDatum* dat){
   if (size>=alloted) {
     resize(size*2);
     }
-  printf("ADDING clone %s at %d\n",str,size);
+  //  printf("ADDING clone %s at %d\n",str,size);
   name[size]=(char*)str;
   data[size]=dat;
   return size++;
@@ -220,12 +224,12 @@ void CLASS::dump(FILE*f,const char* title){
   }
   indent-=2;
 }
-#ifdef DEBUG
+
 void CLASS::setdebugname(char*name,int len){
   strncpy(debugname,name,len);
   debugname[len]=0;
 }
-#endif
+
 /******************************************************************************
  vlogWireDefs
  create wire defintions from pins.

@@ -55,11 +55,9 @@ public:
   cDatum** data;
   int size;
   int alloted;  //number of allocated data ptrs
-#ifdef DEBUG
   //  int debugmax;
   char debugname[256];
   void  setdebugname(char*name,int len);
-#endif
 private:
   static int indent;
 };

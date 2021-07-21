@@ -42,13 +42,16 @@ int main(int argc,char** argv){
 //  g_main_loop_run(gmloop);
   fprintf(stderr,"\nFPGAsm 0.11 (c) 2012 Victor Yurkovsky \n");
   if(argc!=3){
-    printf("Usage: fpgasm <inname.fa> <outname.[v|xdl] \n");
+    printf("Usage: fpgasm <inname.fa> <outname.[v|xdl]> \n");
     exit(1);
   }
-//  pDevice = new cDevice();
-//  pDevice->initialize();
-//  pDevice->parse_xdlrc("xc3s200ft256.xdlrc");
-//  pDevice->listProtos();
+  pDevice = new cDevice();
+  pDevice->initialize();
+  pDevice->parse_xdlrc("device.xdlrc");
+  //  pDevice->listProtos();
+
+
+    
   FILE* fin = (fopen(argv[1],"r"));
   if(!fin){
     fprintf(stderr,"Error. Unable to open %s for input\n",argv[1]);
@@ -73,7 +76,7 @@ int main(int argc,char** argv){
   }  
 // DEBUGGING _ REMOVE ME!
 //fout=stdout;  
-  pDevice = NULL;
+
   cParse* pParser = new cParse();
   try {
     pParser->parse(fin);

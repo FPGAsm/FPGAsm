@@ -55,7 +55,7 @@ void CLASS::parse_defs( char*buf){
       // primitive_def NAME PINS ELEMENTS
       readline();//fgets(buf,1024,f);
    //printf("[%s]\n",buf);
-      char name[32];
+      char name[64];
       int pins;
       int elements;
       sscanf(buf," (primitive_def %s %d %d",(char*)&name,&pins,&elements);
@@ -71,9 +71,9 @@ void CLASS::parse_defs( char*buf){
       int i;
       for(i=0;i<pins;i++){
         readline();//fgets(buf,1024,f);
-        char name[32];
-        char name1[32];
-        char dir[32];
+        char name[64];
+        char name1[64];
+        char dir[64];
         sscanf(buf," (pin %s %s %s",(char*)&name,(char*)&name1,(char*)&dir);
         if(0==strncmp(dir,"input",5))
           prim->pins->add(name,strlen(name),cDatum::newPin(0,0));
@@ -90,7 +90,7 @@ printf("ERROR: pin direction\n");
     // Elements are interesting only if there is a 'cfg' line...
       for(i=0;i<elements;i++){
         readline();//fgets(buf,1024,f); //(element line
-        char elname[32];
+        char elname[64];
         int  elpins;     //not interesting, just to skip lines...
         if(2==sscanf(buf," (element %s %d",elname,&elpins)){
 //printf("OK,elname %s %d\n",elname,elpins);

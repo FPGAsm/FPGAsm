@@ -15,11 +15,12 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with FPGAsm.  If not, see <http://www.gnu.org/licenses/>.
+# #-fsanitize=address\
 #******************************************************************************/
  g++ fpgasm.cpp cDatum.cpp cCollection.cpp cProto.cpp cPrim.cpp cDevice.cpp \
      cModule.cpp cSub.cpp cDyn.cpp cParseStream.cpp cParse.cpp  \
      cMultiWire.cpp cMultiWireBuilder.cpp cMultiWireWalker.cpp \
      cQuark.cpp\
-     -Wall  -fpack-struct -o fpgasm  
+       -Wall  -fpack-struct -o fpgasm  
 #CHANGE THIS LINE to your preferred PATH-visible directory
 cp fpgasm ~/bin

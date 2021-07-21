@@ -32,9 +32,9 @@ typedef  int S32;
 
 #define MAX 256
 
-#define DEBUG_ALLOC 2
+//#define DEBUG_ALLOC 2
 
-#define DEBUG DEBUG_ALLOC
+//#define DEBUG DEBUG_ALLOC
 
 
 #include "cDatum.h"

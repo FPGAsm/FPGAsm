@@ -44,7 +44,7 @@ bool CLASS::handleInclude(int len){
    if('"'==*ptr){
       cDatum* d = parseQuotedString();
        /* and the type of the file included is... */
-      char* xdlrc = strstr(d->valStr,".xdlrc");
+      /*      char* xdlrc = strstr(d->valStr,".xdlrc");
       if(xdlrc){
         if(pDevice){
           errorIn(funcname);
@@ -56,6 +56,7 @@ bool CLASS::handleInclude(int len){
         pDevice->parse_xdlrc(d->valStr);
    
       } else {
+      */ {
         FILE* f = fopen(d->valStr,"r");
         if(!f) {
           errorIn(funcname);
@@ -834,6 +835,7 @@ void CLASS::parseModules(){
     len=cnt();
     /* In between modules, #INCLUDE is allowed */
     if(handleInclude(len))  continue;
+
     if(pDevice){
       /* If device is parsed, a quark or module is expected. */
  //     if(tokAnything("quark",5))
