@@ -107,6 +107,8 @@ int main(int argc,char** argv){
         root->verilog(fout);
         break;
     }
+  
+
   }
   catch(int i){
 //    fprintf(stderr,"CAUGHT %d\n",i);

@@ -190,17 +190,17 @@ void CLASS::parse_tile( char*buf){
     // Appears to be a valid tile description...
     int x;
     int y;
-    char tilename[32];  //placed tilename sitename
-    char whatever[32];
+    char tilename[64];  //placed tilename sitename
+    char whatever[64];
     int count;
     sscanf(buf," (tile %d %d %s %s %d ",&x,&y,(char*)&tilename,(char*)&whatever,&count);
 //printf("read: %d %d %s %d\n",x,y,whatever,count);
     int i;
     for(i=0;i<count;i++){
       readline();//fgets(buf,1024,f);
-      char sitename[32];
-      char sitetype[32];
-      char siteconn[16];
+      char sitename[64];
+      char sitetype[64];
+      char siteconn[64];
       int count;
       sscanf(buf," (primitive_site %s %s %s %d",(char*)&sitename,(char*)&sitetype,(char*)&siteconn,&count);
       //printf("primsite: %s %s %s %d\n",sitename,sitetype,siteconn,count);

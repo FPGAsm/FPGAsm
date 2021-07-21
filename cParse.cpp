@@ -779,7 +779,10 @@ delete xwire;
 //  module->dump(stderr); 
 //fprintf(stderr,"DONE module %s\n",module->name);
   topModule=module;
-  return module;
+
+  // module->dump(stdout);
+
+     return module;
 }
 /******************************************************************************
      parseQuark

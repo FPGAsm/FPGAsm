@@ -52,7 +52,14 @@ void CLASS::xdlDefs(){
         if(0==strcmp("cfg",pparams->name[i])){
           cCollection* cfgs = pparams->data[i]->valCfgs;
           int j; for(j=0;j<cfgs->size;j++){
-            fprintf(fout,"%s::%s ",cfgs->name[j],cfgs->data[j]->valStr);
+	    // most of the time output is name::value, but sometimes we need name:subname:value
+	    // for now, if value starts with a _, output a single colon, the remaining value,
+	    // and another colon...
+	    if ('_'==(cfgs->data[j]->valStr)[0]) {
+              fprintf(fout,"%s:%s: ",cfgs->name[j],(cfgs->data[j]->valStr)+1);
+	    } else {
+              fprintf(fout,"%s::%s ",cfgs->name[j],cfgs->data[j]->valStr);
+	    }
           }
         } else {
           // loc is not interesting to us.
