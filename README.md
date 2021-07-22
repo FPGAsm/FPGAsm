@@ -10,14 +10,14 @@ FPGAsm allows you to build modular hierarchical netlists, acting as a __front-en
 
 ### Who is it for?
 
-FPGAsm is an ideal exploration tool for a hardware hacker.  If you want to truly understand and exploit the Xilinx FPGA architecture, give it a try.
+FPGAsm is an ideal exploration tool for a hardware hacker.  If you want to truly understand and exploit the Xilinx FPGA architecture, give it a try.  
 
 Unlike HDLs, FPGAsm provides direct and unobstructed access to the FPGA hardware grid.  FPGAsm does not __infer__ circuits - it does exactly what you ask for.  Instead of __constraining__ or __annotating__ your code and hoping it works, you are in complete control.  With this comes the responsibility - you must understand the underlying hardware.  Luckily, FPGAsm is the ultimate exploration tool, allowing you to construct quick and repeatable experiments with rapid  turnaround (seconds on smaller FPGAs).
 
 ### What does the code look like?
 
 A simple module example:
-```c++
+```
 //================================    
 	// Digilent Spartan S3 Demo board
 	// 4 pushbuttons
