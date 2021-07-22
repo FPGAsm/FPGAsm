@@ -1,18 +1,18 @@
 ### What is FPGASM? (WORK IN PROGRESS)
 
-FPGAsm is an *experimental low-level hierarchical language* for constructing Xilinx FPGA __netlists__.
+FPGAsm is an __experimental low-level hierarchical language__ for constructing Xilinx FPGA __netlists__.
 
-FPGAsm attempts to *minimize build time*, and provide an *alternative to Verilog and VHDL*.  It encourages *modularity* and *reusability*, and provides a tool for *exploration and fuller understanding* of the underlying hardware, leading to *better utilization* and *personal satisfaction*.
+FPGAsm attempts to __minimize build time__, and provide an __alternative to Verilog and VHDL__.  It encourages __modularity__ and __reusability__, and provides a tool for __exploration and fuller understanding__ of the underlying hardware, leading to __better utilization__ and __personal satisfaction__.
 
-FPGAsm's *minimal syntax* encourages the creation of *small, reusable modules* (which consist of other modules and wiring).  Low-level modules interface with FPGA hardware (IOBs, LUTs, memories, etc).  These are used to construct higher-level modules (ALUs, bus latches, memory controllers); these in turn can form working systems, represented by the __top module__.  Each module may be independently tested and characterized, 
+FPGAsm's __minimal syntax__ encourages the creation of __small, reusable modules__ (which consist of other modules and wiring).  Low-level modules interface with FPGA hardware (IOBs, LUTs, memories, etc).  These are used to construct higher-level modules (ALUs, bus latches, memory controllers); these in turn can form working systems, represented by the __top module__.  Each module may be independently tested and characterized, 
 
-FPGAsm allows you to build modular hierarchical netlists, acting as a *front-end* of an FPGA toolchain.  FPGAsm is a manual equivalent of a synthethis, mapping and placement tool.  It relies on a back-end (currently Xilinx ISE 14.7) for final routing and bitstream generation.  FPGAsm uses XDL as its output format.
+FPGAsm allows you to build modular hierarchical netlists, acting as a __front-end__ of an FPGA toolchain.  FPGAsm is a manual equivalent of a synthethis, mapping and placement tool.  It relies on a back-end (currently Xilinx ISE 14.7) for final routing and bitstream generation.  FPGAsm uses XDL as its output format.
 
 ### Who is it for?
 
 FPGAsm is an ideal exploration tool for a hardware hacker.  If you want to truly understand and exploit the Xilinx FPGA architecture, give it a try.
 
-Unlike HDLs, FPGAsm provides direct and unobstructed access to the FPGA hardware grid.  FPGAsm does not *infer* circuits - it does exactly what you ask for.  Instead of *constraining* or *annotating* your code and hoping it works, you are in complete control.  With this comes the responsibility - you must understand the underlying hardware.  Luckily, FPGAsm is the ultimate exploration tool, allowing you to construct quick and repeatable experiments with rapid  turnaround (seconds on smaller FPGAs).
+Unlike HDLs, FPGAsm provides direct and unobstructed access to the FPGA hardware grid.  FPGAsm does not __infer__ circuits - it does exactly what you ask for.  Instead of __constraining__ or __annotating__ your code and hoping it works, you are in complete control.  With this comes the responsibility - you must understand the underlying hardware.  Luckily, FPGAsm is the ultimate exploration tool, allowing you to construct quick and repeatable experiments with rapid  turnaround (seconds on smaller FPGAs).
 
 ### What does the code look like?
 
