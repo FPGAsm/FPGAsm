@@ -1,6 +1,6 @@
 FPGAsm is an experimental low-level hierarchical language for constructing FPGA circuits.  
 
-Unlike HDLs, FPGAsm provides access to the FPGA hardware grid.  Starting at the low level, modules are defined to control basic FPGA features, such as IOBs, LUTs, memories, etc.  Using these, higher-level modules may be constructed, instantiating low-level modules and providing internal wiring.  The hierarchy is thus built all the way to the top module.  Placement (absolute or relative) may be specified.
+Unlike HDLs, FPGAsm provides access to the FPGA hardware grid.  Starting at the low level, modules are defined to control basic FPGA features, such as IOBs, LUTs, memories, etc.  Using these, higher-level modules may be constructed, instantiating low-level modules and providing internal wiring.  The hierarchy is thus built all the way to the top module.  Placement (absolute or relative) may be specified.  An external router/bitstream generator is required.
 
 A simple module example:
 ```c++
