@@ -40,9 +40,10 @@ int main(int argc,char** argv){
 //  gmloop = g_main_loop_new (NULL, TRUE);
 //  
 //  g_main_loop_run(gmloop);
-  fprintf(stderr,"\nFPGAsm 0.11 (c) 2012 Victor Yurkovsky \n");
+  fprintf(stderr,"\nFPGAsm 0.12 (c) 2012,2021 Victor Yurkovsky \n");
+  fprintf(stderr,"All rights reserved.  Released under GPL 3\n");
   if(argc!=3){
-    printf("Usage: fpgasm <inname.fa> <outname.[v|xdl]> \n");
+    printf("Usage: fpgasm <inname.fa> <outname.xdl> \n");
     exit(1);
   }
   pDevice = new cDevice();
