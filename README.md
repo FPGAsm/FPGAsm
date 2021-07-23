@@ -68,7 +68,7 @@ Executing `fpgasm` without any parameters should output the copyright notice and
 
 ```
     Usage: fpgasm <inname.fa> <outname.xdl>
-
+```
 ### Using FPGAsm
 
 See the wiki, the repository fpgasm-test and references below for more information.
