@@ -58,11 +58,7 @@ Xilinx ISE 14.7 must be installed, and configured to work from the command line.
 
 ### Build
 
-A normal c++ build environment should be sufficient to compile fpgasm.
-
-Run the 'build' shell script to create an executable binary called 'fpgasm'.
-
-Place the executable to a directory in your PATH.
+A normal c++ build environment should be sufficient to build fpgasm with `make`.  Either `sudo make install` will copy the binary to `/bin`, or move the executable `fpgasm` to to a directory in your PATH.
 
 ### Command Line Parameters
 
