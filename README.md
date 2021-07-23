@@ -64,15 +64,23 @@ Run the 'build' shell script to create an executable binary called 'fpgasm'.
 
 Place the executable to a directory in your PATH.
 
+### Command Line Parameters
+
 Executing `fpgasm` without any parameters should output the copyright notice and usage information:
 
 ```
-    Usage: fpgasm <inname.fa> <outname.xdl>
-```
-### Using FPGAsm
+    Usage: fpgasm <inname.fa> <outname.xdl> [<device>.xdlrc]
+
+<inname.fa>     source fpgasm file
+<outname>.xdl   output XDL file
+<device>.xdlrc  optional device description filename.  If omitted, fpgasm
+                will try to open 'device.xdlrc' in the current directory.
+
+### How to really use it
 
 See the wiki, the repository fpgasm-test and references below for more information.
 
+Integration with ISE is convoluted and arcane.  For a complete buildable projects, see the examples.
 
 
 

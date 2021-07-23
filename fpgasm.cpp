@@ -34,23 +34,21 @@ unsigned gLineNo=0;
 
 
 #include "malloc.h"
+//==============================================================================
 int main(int argc,char** argv){
-
-//  ;GMainLoop*  gmloop;
-//  gmloop = g_main_loop_new (NULL, TRUE);
-//  
-//  g_main_loop_run(gmloop);
   fprintf(stderr,"\nFPGAsm 0.12 (c) 2012,2021 Victor Yurkovsky \n");
   fprintf(stderr,"All rights reserved.  Released under GPL 3\n");
-  if(argc!=3){
-    printf("Usage: fpgasm <inname.fa> <outname.xdl> \n");
+  if((argc<3)||(argc>4)){
+    printf("Usage: fpgasm <inname.fa> <outname>.xdl [<device>.xdlrc] \n");
     exit(1);
   }
+  //TODO:validate file extensions
+  // Handle the optional device parameter, defaulting to 'device.xdlrc'
+  char* devname = ((4==argc) ? argv[3] : (char*)"device.xdlrc");
   pDevice = new cDevice();
   pDevice->initialize();
-  pDevice->parse_xdlrc("device.xdlrc");
+  pDevice->parse_xdlrc(devname);
   //  pDevice->listProtos();
-
 
     
   FILE* fin = (fopen(argv[1],"r"));
