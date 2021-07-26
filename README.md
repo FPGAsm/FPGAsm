@@ -8,6 +8,16 @@ FPGAsm's __minimal syntax__ encourages the creation of __small, reusable modules
 
 FPGAsm allows you to build modular hierarchical netlists, acting as a __front-end__ of an FPGA toolchain.  FPGAsm is a manual equivalent of a synthethis, mapping and placement tool.  It relies on a back-end (currently Xilinx ISE 14.7) for final routing and bitstream generation.  FPGAsm uses XDL as its output format.
 
+### Release notes
+2021: I am back at it.  Updated the code to handle Artix-100 devices.
+* Separated xdlrc load from source.  Do not include xdlrc files - instead, rename the
+  xdlrc to 'device.xdlrc' (or symlink it) in the invocation directory, or specify the
+  file as the third parameter.
+* removed many (not all) memory leaks;
+* increased size of name buffers (caused crashes with Artix)
+* made a provision for cfgs like IOBUF:something:  For instance, if you want:
+  AAA:bbb:   the FPGAsm syntax is AAA:_bbb (undrescore removed, colon appended).
+
 ### Who is it for?
 
 FPGAsm is an ideal exploration tool for a hardware hacker.  If you want to truly understand and exploit the Xilinx FPGA architecture, give it a try.  
@@ -71,29 +81,23 @@ Executing `fpgasm` without any parameters should output the copyright notice and
 <outname>.xdl   output XDL file
 <device>.xdlrc  optional device description filename.  If omitted, fpgasm
                 will try to open 'device.xdlrc' in the current directory.
+```
 
 ### How to really use it
 
-See the wiki, the repository fpgasm-test and references below for more information.
-
-Integration with ISE is convoluted and arcane.  For a complete buildable projects, see the examples.
+* [FPGAsm blog](https://fpgasm.github.io/) for details, commentary and updates
 
 
+Outdated but useful, for now:
 
+* [the wiki](https://github.com/stacksmith/fpgasm/wiki) for more information.
+* [fpgasm-test](https://github.com/stacksmith/fpgasm-test)  test code
 
 ### References
 OLD version:
-See [the wiki](https://github.com/stacksmith/fpgasm/wiki) for more information.
 
 See other repos for tools and code
 * [fpgasm-test](https://github.com/stacksmith/fpgasm-test)  test code
 * [fpgasm-xcfg](https://github.com/stacksmith/fpgasm-xcfg)  visual configuration string tool
 
-2021: I am back at it.  Updated the code to handle Artix-100 devices.
-* Separated xdlrc load from source.  Do not include xdlrc files - instead, rename the
-  xdlrc to 'device.xdlrc' (or symlink it) in the invocation directory (for now).
-* removed many (not all) memory leaks;
-* increased size of name buffers (caused crashes with Artix)
-* made a provision for cfgs like IOBUF:something:  For instance, if you want:
-  AAA:bbb:   the FPGAsm syntax is AAA:_bbb (undrescore removed, colon appended).
   
